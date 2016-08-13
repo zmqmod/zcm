@@ -1,4 +1,4 @@
-/** @file    server.cpp 
+/** @file    server.cpp
  *  @author  Pranav Srinivas Kumar
  *  @date    2016.04.24
  *  @brief   This file contains definitions for the Server class
@@ -63,7 +63,8 @@ namespace zcm {
       while(!ready) {}
       zmq::message_t received_request;
       server_socket->recv(&received_request);
-      std::string request = std::string(static_cast<char*>(received_request.data()), 
+      std::cout << "/* message received by 0MQ */" << std::endl;
+      std::string request = std::string(static_cast<char*>(received_request.data()),
 					received_request.size());
       ready = false;
       if (request.length() > 0) {
@@ -115,4 +116,3 @@ namespace zcm {
   }
 
 }
-

@@ -5,6 +5,7 @@
  */
 
 #include "client_component.hpp"
+#include <exception>
 
 namespace zcm {
 
@@ -42,10 +43,19 @@ namespace zcm {
     // Prepare request string
     std::string * request_string = new std::string;
     new_message.SerializeToString(request_string);
+    printf("%s: %s\n", "Prepared request", request_string->c_str() );
 
     // Call server
-    std::string response = client("client_port")->call(*request_string);
-    std::cout << "Client Timer : Received response: " << response << std::endl;
+    try
+    {
+      std::string response = client("client_port")->call(*request_string);
+      std::cout << "Client Timer : Received response: " << response << std::endl;
+    }
+    catch (const std::runtime_error& error)
+    {
+      std::cout << "Error: " << error.what()<< std::endl;
+    }
+
   }
 
 }
