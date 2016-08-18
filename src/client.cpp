@@ -1,4 +1,4 @@
-/** @file    client.cpp 
+/** @file    client.cpp
  *  @author  Pranav Srinivas Kumar
  *  @date    2016.04.24
  *  @brief   This file contains definitions for the Client class
@@ -9,17 +9,17 @@
 namespace zcm {
 
   // Construct a simple client
-  Client::Client(std::string name, 
+  Client::Client(std::string name,
 		 zmq::context_t * actor_context,
-		 int timeout = 500) : 
-    name(name), 
+		 int timeout = 500) :
+    name(name),
     context(actor_context),
     client_socket_timeout(timeout) {}
 
   // Construct a client with known endpoints
-  Client::Client(std::string name, 
+  Client::Client(std::string name,
 		 zmq::context_t * actor_context,
-		 std::vector<std::string> endpoints, 
+		 std::vector<std::string> endpoints,
 		 int timeout = 500) :
     name(name),
     endpoints(endpoints),
@@ -33,8 +33,8 @@ namespace zcm {
       try {
 	client_socket->connect(endpoint);
       } catch (zmq::error_t error) {
-	std::cout << "Unable to connect client " << 
-	  name << " to " << endpoint << std::endl;      
+	std::cout << "Unable to connect client " <<
+	  name << " to " << endpoint << std::endl;
       }
     }
   }
@@ -55,11 +55,11 @@ namespace zcm {
       try {
 	client_socket->connect(endpoint);
       } catch (zmq::error_t error) {
-	std::cout << "Unable to connect client " << 
-	  name << " to " << endpoint << std::endl;      
+	std::cout << "Unable to connect client " <<
+	  name << " to " << endpoint << std::endl;
       }
     }
-  }  
+  }
 
   std::string Client::get_name() {
     return name;
@@ -74,8 +74,10 @@ namespace zcm {
   std::string Client::call(std::string message) {
     zmq::message_t request(message.length());
     memcpy(request.data(), message.c_str(), message.length());
+    std::cout << "/* client message */" << message.c_str() << std::endl;
     try {
-      client_socket->send(request);  
+      std::cout << "/* Client 0MQ send */" << request.size() << std::endl;
+      client_socket->send(request);
     }
     catch (zmq::error_t &e) {
       throw std::runtime_error(e.what());
@@ -83,6 +85,10 @@ namespace zcm {
     // Wait for response
     zmq::message_t reply;
     client_socket->recv(&reply);
+    std::string reply_str = std::string(static_cast<char*>(reply.data()), reply.size());
+
+    std::cout << "/* Client 0MQ recv */" << reply.size() << std::endl;
+
     return std::string(static_cast<char*>(reply.data()), reply.size());
   }
 

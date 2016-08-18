@@ -43,13 +43,13 @@ namespace zcm {
     // Prepare request string
     std::string * request_string = new std::string;
     new_message.SerializeToString(request_string);
-    printf("%s: %s\n", "Prepared request", request_string->c_str() );
+    std::cout << "/* client_comp request string */" << *request_string << std::endl;
 
     // Call server
     try
     {
       std::string response = client("client_port")->call(*request_string);
-      std::cout << "Client Timer : Received response: " << response << std::endl;
+      std::cout << "Client.Received response: " << response << std::endl;
     }
     catch (const std::runtime_error& error)
     {
