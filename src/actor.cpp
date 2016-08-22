@@ -11,8 +11,10 @@ namespace zcm {
   // Use configuration file to prepare component instance vector
   void Actor::configure(std::string configuration_file) {
     Json::Value root;
+    std::cout << "configure actor" << configuration_file << std::endl;
     std::ifstream configuration(configuration_file, std::ifstream::binary);
     configuration >> root;
+    std::cout << "actor config file: " << root << std::endl;
 
     zmq::context_t * context = new zmq::context_t(1);
     std::cout << "/* start configure */" << std::endl;
