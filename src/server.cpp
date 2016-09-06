@@ -120,4 +120,8 @@ namespace zcm {
     *response = new_response;
   }
 
+  std::vector<std::string> Server::getEndpoints(){
+    return endpoints;
+  }
+
 }
