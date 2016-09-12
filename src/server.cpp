@@ -61,18 +61,18 @@ namespace zcm {
 
   void Server::recv() {
     while(true) {
-      std::cout << "/* ready state*/" << ready << std::endl;
+      //std::cout << "/* ready state*/" << ready << std::endl;
       while(!ready) {}
       zmq::message_t received_request;
       server_socket->recv(&received_request);
-      std::cout << "/* request received by 0MQ */" << std::endl;
+      //std::cout << "/* request received by 0MQ */" << std::endl;
       std::string request = std::string(static_cast<char*>(received_request.data()),
 					received_request.size());
-      std::cout << "/* server request string */" << request << std::endl;
-      std::cout << "/* server request length: */" << request.length() << std::endl;
+      //std::cout << "/* server request string */" << request << std::endl;
+      //std::cout << "/* server request length: */" << request.length() << std::endl;
       if (request.length() > 0) {
         ready = false;
-        std::cout << "/* Q operation */" << std::endl;
+        //std::cout << "/* Q operation */" << std::endl;
         func_mutex.lock();
         buffer.push(request);
         // Create a new operation & bind the request as the first argument
@@ -80,7 +80,7 @@ namespace zcm {
           = new Server_Operation(name, priority, operation_function, server_socket, &ready, response);
           operation_queue_ptr->enqueue(new_operation);
           func_mutex.unlock();
-          std::cout << "/* operation Q'd */" << std::endl;
+          //std::cout << "/* operation Q'd */" << std::endl;
       }
     }
   }
