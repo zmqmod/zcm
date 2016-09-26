@@ -68,7 +68,8 @@ namespace zcm {
       result = x*y;
     }
     std::string received_message = subscriber("Name_Subscriber")->message();
-    std::cout << "Component 1 : Subscriber : Received message: " << received_message << std::endl;
+    std::cout << "Component 1 : Subscriber : Received message: " 
+			<< received_message << std::endl;
   }    
     
 }
