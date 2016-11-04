@@ -1,4 +1,4 @@
-/** @file    server.hpp 
+/** @file    server.hpp
  *  @author  Pranav Srinivas Kumar
  *  @date    2016.04.24
  *  @brief   This file declares the Server class
@@ -28,7 +28,7 @@ namespace zcm {
      * @param[in] ZMQ Context of the Actor Process
      * @param[in] operation_function Operation function of the server
      * @param[in] operation_queue_ptr Pointer to the operation queue
-     */    
+     */
     Server(std::string name,
 	   unsigned int priority,
 	   zmq::context_t * actor_context,
@@ -50,7 +50,7 @@ namespace zcm {
      * @param[in] endpoints A vector of endpoints to bind to
      * @param[in] operation_function Operation function of the server
      * @param[in] operation_queue_ptr Pointer to the operation queue
-     */      
+     */
     Server(std::string name,
 	   unsigned int priority,
 	   zmq::context_t * actor_context,
@@ -61,29 +61,29 @@ namespace zcm {
 
     /**
      * @brief Close the server socket and destroy the ZMQ context
-     */  
+     */
     ~Server();
 
     /**
      * @brief Bind to a new set of endpoints
      * param[in] new_endpoints A new vector of endpoints to bind to
-     */  
+     */
     void bind(std::vector<std::string> new_endpoints);
 
     /**
      * @brief Get the name of the server
-     */  
+     */
     std::string get_name();
 
     /**
      * @brief Get the priority of the server
-     */   
+     */
     unsigned int get_priority();
 
     /**
      * @brief Add a new connection to the server
      * @param[in] new_connection New connection address to bind to
-     */      
+     */
     void add_connection(std::string new_connection);
 
     /**
@@ -93,24 +93,24 @@ namespace zcm {
      * (2) Create a Server Operation
      * (3) Enqueue onto operation_queue
      * (4) Goto step (1)
-     */  
+     */
     void recv();
- 
+
     /**
      * @brief Rebind the server operation function
-     * @param[in] new_operation_function New server function to be handled upon recv() 
-     */  
+     * @param[in] new_operation_function New server function to be handled upon recv()
+     */
     void rebind_operation_function(std::function<void()> new_operation_function);
 
     /**
      * @brief Spawn a new thread for the server
      * @return Server thread
-     */    
+     */
     std::thread spawn();
 
     /**
      * @brief Start the server thread
-     */  
+     */
     void start();
 
     /**
@@ -124,9 +124,11 @@ namespace zcm {
     std::string message();
 
     /**
-     * @brief Set the response string 
+     * @brief Set the response string
      */
     void set_response(std::string new_response);
+
+    std::vector<std::string> getEndpoints();
 
   private:
 

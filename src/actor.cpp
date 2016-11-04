@@ -1,4 +1,4 @@
-/** @file    actor.cpp 
+/** @file    actor.cpp
  *  @author  Pranav Srinivas Kumar
  *  @date    2016.04.24
  *  @brief   This file contains definitions for the Actor class
@@ -11,11 +11,13 @@ namespace zcm {
   // Use configuration file to prepare component instance vector
   void Actor::configure(std::string configuration_file) {
     Json::Value root;
+    std::cout << "configure actor" << configuration_file << std::endl;
     std::ifstream configuration(configuration_file, std::ifstream::binary);
     configuration >> root;
+    std::cout << "actor config file: " << root << std::endl;
 
     zmq::context_t * context = new zmq::context_t(1);
-
+    std::cout << "/* start configure */" << std::endl;
     for (unsigned int i = 0; i < root["Component Instances"].size(); i++) {
       std::string component_library = root["Component Instances"][i]["Definition"].asString();
       void * handle = dlopen(component_library.c_str(), RTLD_NOW);
@@ -26,13 +28,14 @@ namespace zcm {
 	create = (Component * (*)())dlsym(handle, "create_component");
 	Component * component_instance = (Component*)create();
 
+  //Create a .... struct?
 	std::map<std::string, std::vector<std::string>> publishers_config_map;
 	std::map<std::string, std::vector<std::string>> subscribers_config_map;
 	std::map<std::string, std::vector<std::string>> clients_config_map;
 	std::map<std::string, std::vector<std::string>> servers_config_map;
 
 	// Configure all component instance timers
-	for (unsigned int j = 0; j < root["Component Instances"][i]["Timers"].size(); j++) {	 
+	for (unsigned int j = 0; j < root["Component Instances"][i]["Timers"].size(); j++) {
 	  Json::Value timer_config = root["Component Instances"][i]["Timers"][j];
 	  std::string timer_name = timer_config["Name"].asString();
 	  unsigned int timer_priority = timer_config["Priority"].asUInt();
@@ -44,7 +47,7 @@ namespace zcm {
 					component_instance->functionality[timer_operation],
 					component_instance->get_operation_queue());
 	  component_instance->add_timer(new_timer);
-	}	
+	}
 
 	// Configure all component instance publishers
 	for (unsigned int j = 0; j < root["Component Instances"][i]["Publishers"].size(); j++) {
@@ -63,7 +66,7 @@ namespace zcm {
 	  std::string subscriber_name = subscriber_config["Name"].asString();
 	  unsigned int subscriber_priority = subscriber_config["Priority"].asUInt();
 	  std::string subscriber_filter = subscriber_config["Filter"].asString();
-	  std::string subscriber_operation = subscriber_config["Function"].asString();	  
+	  std::string subscriber_operation = subscriber_config["Function"].asString();
 	  for (unsigned int k = 0; k < subscriber_config["Endpoints"].size(); k++) {
 	    subscribers_config_map[subscriber_name].push_back(subscriber_config["Endpoints"][k].asString());
 	  }
@@ -95,7 +98,7 @@ namespace zcm {
 	  int server_timeout = (int)(1000 * server_config["Timeout"].asFloat());
 	  std::string server_name = server_config["Name"].asString();
 	  unsigned int server_priority = server_config["Priority"].asUInt();
-	  std::string server_operation = server_config["Function"].asString();	  	  
+	  std::string server_operation = server_config["Function"].asString();
 	  for (unsigned int k = 0; k < server_config["Endpoints"].size(); k++) {
 	    servers_config_map[server_name].push_back(server_config["Endpoints"][k].asString());
 	  }
@@ -105,7 +108,7 @@ namespace zcm {
 					   component_instance->functionality[server_operation],
 					   component_instance->get_operation_queue(),
 					   server_timeout);
-	  component_instance->add_server(new_server);	  
+	  component_instance->add_server(new_server);
 	}
 
 	component_instance->configure_publishers(publishers_config_map);
@@ -115,6 +118,7 @@ namespace zcm {
 	component_instances.push_back(component_instance);
       }
     }
+    std::cout << "end configure" << std::endl;
   }
 
   void Actor::run() {
