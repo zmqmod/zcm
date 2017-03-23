@@ -33,7 +33,7 @@ Install ZCM
 ------------
 
 ```bash
-$ git clone https://github.com/pranav-srinivas-kumar/zcm
+$ git clone https://github.com/zmqmod/zcm
 $ cd zcm
 $ make
 $ sudo make install
