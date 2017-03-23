@@ -35,6 +35,7 @@ Install ZCM
 ```bash
 $ git clone https://github.com/zmqmod/zcm
 $ cd zcm
+$ cmake .
 $ make
 $ sudo make install
 $ sudo ldconfig
